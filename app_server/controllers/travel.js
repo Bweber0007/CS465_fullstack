@@ -6,7 +6,7 @@ const options = {
     method: 'GET',
     headers: {
         'Accept':'application/json'
-    }
+        }
 }
 
 /* GET travel view */
