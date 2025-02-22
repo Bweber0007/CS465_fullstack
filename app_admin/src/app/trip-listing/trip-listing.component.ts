@@ -8,6 +8,9 @@ import { TripDataService } from '../services/trip-data.service';
 import { Router } from '@angular/router';
 import { trips } from '../data/trips';
 
+import { AuthenticationService } from '../services/authentication.service';
+
+
 @Component({
   selector: 'app-trip-listing',
   standalone: true,
@@ -22,9 +25,17 @@ export class TripListingComponent implements OnInit{
   //trips: Array<any> = trips;
   message: string = '';
 
-  constructor(private tripDataService: TripDataService, private router: Router) {
+  constructor(
+    private tripDataService: TripDataService, 
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
     console.log('trip-listing constructor');
   }
+
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
+    }
 
   public addTrip(): void {
     this.router.navigate(['add-trip'])
@@ -38,6 +49,7 @@ export class TripListingComponent implements OnInit{
           if(value.length > 0)
           {
             this.message = 'There are ' + value.length + ' trips available.';
+            console.log("Trips are stored in component:", this.trips);
           }
           else{
            this.message = 'There were no trips retrieved from the database';
@@ -52,6 +64,8 @@ export class TripListingComponent implements OnInit{
 
   ngOnInit(): void {
     console.log('ngOnInit');
-    this.getStuff();
-  }
+    // Wait until token is set before fetching trips
+    setTimeout(() => {
+      this.getStuff();
+  }, 500);  }
 }
